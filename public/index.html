@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles.css" rel="stylesheet">
+    <title>Chat Sistemas Distribuidos</title>
+</head>
+<body>
+     <form id="chat">
+         <input type="text" name="username" placeholder="Digite o usuário">
+         <div class="messages"></div>
+         <input type="text" name="message" placeholder="Digite sua mensagem">
+         <button type="submit">Enviar</button>
+     </form>
+     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js" integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     
+     <script type="text/javascript">
+        let socket = io("http://localhost:8000");
+
+        function renderMessage(message) {
+            $(".messages").append(`<div class='message'><strong>[${message.hour}] [${message.author}]</strong>: ${message.message}</div>`)
+        }
+
+        socket.on('previousMessages', function (messages) {
+            for (message of messages) {
+                renderMessage(message);
+            }
+        });
+
+        socket.on('receivedMessage', function (message) {
+            renderMessage(message);
+        });
+
+        $('#chat').submit(function (event) {
+            event.preventDefault();
+
+            let author = $('input[name="username"]').val();
+            let message = $('input[name="message"').val();
+
+            let hour = moment().format('HH:mm:ss')
+
+            if(author.length && message.length) {
+                let messageObject = {
+                    author,
+                    message,
+                    hour
+                }
+
+                renderMessage(messageObject);
+
+                socket.emit("sendMessage", messageObject);
+            }
+        })
+     </script>
+</body>
+</html>
