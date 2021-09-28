@@ -8,11 +8,12 @@
     <title>Chat Sistemas Distribuidos</title>
 </head>
 <body>
+     <div id="header">Chat - SD</div>
      <form id="chat">
-         <input type="text" name="username" placeholder="Digite o usuário">
+         <input id="user" type="text" name="username" placeholder="Digite o seu usuário" required>
          <div class="messages"></div>
-         <input type="text" name="message" placeholder="Digite sua mensagem">
-         <button type="submit">Enviar</button>
+         <input id="input-message" type="text" name="message" placeholder="Digite sua mensagem" required>
+         <button id="send-btn" type="submit">Enviar</button>
      </form>
      <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js" integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
