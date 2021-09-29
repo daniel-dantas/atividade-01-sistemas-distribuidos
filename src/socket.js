@@ -1,14 +1,19 @@
+const { MongoClient } = require('mongodb');
 
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
 
-const connectSockets = (io) => {
+const connectSockets = async (io) => {
+    await client.connect();
+    const db = client.db('myProject');
+    const collection = db.collection('messages');
 
-    let messages = [];
-
-    io.on('connection', socket => {
+    io.on('connection', async (socket) => {
+        let messages = await collection.find().sort({ time: 1 }).toArray();
         socket.emit("previousMessages", messages);
     
-        socket.on("sendMessage", data => {
-            messages.push(data);
+        socket.on("sendMessage", async (data) => {
+            await collection.insertOne({ ...data });
             socket.broadcast.emit('receivedMessage', data);
         });
     })

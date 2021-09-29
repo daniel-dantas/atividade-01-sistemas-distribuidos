@@ -22,7 +22,7 @@
         let socket = io("http://localhost:8000");
 
         function renderMessage(message) {
-            $(".messages").append(`<div class='message'><strong>[${message.hour}] [${message.author}]</strong>: ${message.message}</div>`)
+            $(".messages").append(`<div class='message'><strong>[${moment(message.time).format('HH:mm:ss')}] [${message.author}]</strong>: ${message.message}</div>`)
         }
 
         socket.on('previousMessages', function (messages) {
@@ -41,13 +41,11 @@
             let author = $('input[name="username"]').val();
             let message = $('input[name="message"').val();
 
-            let hour = moment().format('HH:mm:ss')
-
             if(author.length && message.length) {
                 let messageObject = {
                     author,
                     message,
-                    hour
+                    time: new Date().toISOString()
                 }
 
                 renderMessage(messageObject);
