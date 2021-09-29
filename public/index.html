@@ -51,6 +51,8 @@
 
                 renderMessage(messageObject);
 
+                document.querySelector('[name="message"]').value = "";
+
                 socket.emit("sendMessage", messageObject);
             }
         })
